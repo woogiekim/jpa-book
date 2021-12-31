@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class JpashopApplication
+class JpaShopApplication
 
 fun main(args: Array<String>) {
-    runApplication<JpashopApplication>(*args)
+    runApplication<JpaShopApplication>(*args)
 }
