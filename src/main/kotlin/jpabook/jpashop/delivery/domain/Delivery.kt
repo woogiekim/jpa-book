@@ -14,5 +14,5 @@ class Delivery(
     var address: Address,
 
     @Enumerated(EnumType.STRING)
-    var status: DeliveryStatus
+    var status: DeliveryStatus = DeliveryStatus.READY
 ) : BaseEntity()

@@ -1,11 +1,7 @@
 package jpabook.jpashop.item.domain
 
 import jpabook.jpashop.jpa.BaseEntity
-import javax.persistence.DiscriminatorColumn
-import javax.persistence.DiscriminatorValue
-import javax.persistence.Entity
-import javax.persistence.Inheritance
-import javax.persistence.InheritanceType
+import javax.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -13,26 +9,65 @@ import javax.persistence.InheritanceType
 abstract class Item(
     var name: String? = null,
     var price: Int? = null,
-    var stockQuantity: Int? = null
+    var stockQuantity: Int? = null,
+
+    @ManyToMany
+    var categories: MutableList<Category> = mutableListOf()
 ) : BaseEntity()
 
 @Entity
 @DiscriminatorValue("A")
-class Album(
-    var artist: String,
+class Album : Item() {
+    lateinit var artist: String
     var etc: String? = null
-) : Item()
+
+    companion object {
+        fun create(name: String, price: Int, stockQuantity: Int, artist: String, etc: String? = null): Album {
+            return Album().apply {
+                this.name = name
+                this.price = price
+                this.stockQuantity = stockQuantity
+                this.artist = artist
+                this.etc = etc
+            }
+        }
+    }
+}
 
 @Entity
 @DiscriminatorValue("M")
-class Movie(
-    var director: String,
-    var actor: String
-) : Item()
+class Movie : Item() {
+    lateinit var director: String
+    lateinit var actor: String
+
+    companion object {
+        fun create(name: String, price: Int, stockQuantity: Int, director: String, actor: String): Movie {
+            return Movie().apply {
+                this.name = name
+                this.price = price
+                this.stockQuantity = stockQuantity
+                this.director = director
+                this.actor = actor
+            }
+        }
+    }
+}
 
 @Entity
 @DiscriminatorValue("B")
-class Book(
-    var author: String,
-    var isbn: String
-) : Item()
+class Book : Item() {
+    lateinit var author: String
+    lateinit var isbn: String
+
+    companion object {
+        fun create(name: String, price: Int, stockQuantity: Int, author: String, isbn: String): Book {
+            return Book().apply {
+                this.name = name
+                this.price = price
+                this.stockQuantity = stockQuantity
+                this.author = author
+                this.isbn = isbn
+            }
+        }
+    }
+}

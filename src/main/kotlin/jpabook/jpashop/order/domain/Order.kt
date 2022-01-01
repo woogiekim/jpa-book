@@ -13,10 +13,10 @@ class Order(
     var member: Member,
 
     @OneToOne
-    var delivery: Delivery,
+    var delivery: Delivery? = null,
 
     val orderDate: OffsetDateTime? = OffsetDateTime.now(),
 
     @Enumerated(EnumType.STRING)
-    var status: OrderStatus
+    var status: OrderStatus = OrderStatus.ORDER
 ) : BaseEntity()
