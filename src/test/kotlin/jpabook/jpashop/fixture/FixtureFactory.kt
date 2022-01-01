@@ -35,9 +35,5 @@ class FixtureFactory {
         fun createBook(): Book {
             return Book.create("자바 ORM 표준 JPA 프로그래밍", 35_000, 10_000_000, "김영한", "ISBN 000-000-0000").apply { id = 1 }
         }
-
-        fun createItems(vararg items: Item): List<Item> {
-            return listOf(*items)
-        }
     }
 }

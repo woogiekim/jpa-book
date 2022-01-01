@@ -1,5 +1,7 @@
 package jpabook.jpashop.item.domain
 
+import jpabook.jpashop.exception.ErrorCode
+import jpabook.jpashop.extensions.validateNotNull
 import jpabook.jpashop.jpa.BaseEntity
 import javax.persistence.*
 
@@ -13,7 +15,26 @@ abstract class Item(
 
     @ManyToMany
     var categories: MutableList<Category> = mutableListOf()
-) : BaseEntity()
+) : BaseEntity() {
+    fun change(item: Item) {
+        validate()
+
+        this.name = item.name
+        this.price = item.price
+        this.stockQuantity = item.stockQuantity
+    }
+
+    @PrePersist
+    fun prePersist() {
+        validate()
+    }
+
+    private fun validate() {
+        validateNotNull(name) { ErrorCode.REQUIRED }
+        validateNotNull(price) { ErrorCode.REQUIRED }
+        validateNotNull(stockQuantity) { ErrorCode.REQUIRED }
+    }
+}
 
 @Entity
 @DiscriminatorValue("A")
@@ -58,6 +79,13 @@ class Movie : Item() {
 class Book : Item() {
     lateinit var author: String
     lateinit var isbn: String
+
+    fun change(book: Book) {
+        super.change(book)
+
+        this.author = book.author
+        this.isbn = book.isbn
+    }
 
     companion object {
         fun create(name: String, price: Int, stockQuantity: Int, author: String, isbn: String): Book {
