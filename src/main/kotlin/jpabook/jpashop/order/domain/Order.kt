@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "\"order\"")
+@Table(name = "\"ORDER\"")
 class Order(
     @ManyToOne
     var member: Member,

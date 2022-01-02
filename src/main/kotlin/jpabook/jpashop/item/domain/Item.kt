@@ -1,13 +1,13 @@
 package jpabook.jpashop.item.domain
 
 import jpabook.jpashop.exception.ErrorCode
+import jpabook.jpashop.extensions.validate
 import jpabook.jpashop.extensions.validateNotNull
 import jpabook.jpashop.jpa.BaseEntity
 import javax.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
 abstract class Item(
     var name: String? = null,
     var price: Int? = null,
@@ -17,19 +17,25 @@ abstract class Item(
     var categories: MutableList<Category> = mutableListOf()
 ) : BaseEntity() {
     fun change(item: Item) {
-        validate()
+        verify()
 
         this.name = item.name
         this.price = item.price
         this.stockQuantity = item.stockQuantity
     }
 
-    @PrePersist
-    fun prePersist() {
-        validate()
+    fun sell(count: Int) {
+        validate(this.stockQuantity?.minus(count)!! >= 0) { ErrorCode.OUT_OF_STOCK }
+
+        this.stockQuantity = this.stockQuantity?.minus(count)
     }
 
-    private fun validate() {
+    @PrePersist
+    fun prePersist() {
+        verify()
+    }
+
+    private fun verify() {
         validateNotNull(name) { ErrorCode.REQUIRED }
         validateNotNull(price) { ErrorCode.REQUIRED }
         validateNotNull(stockQuantity) { ErrorCode.REQUIRED }
@@ -37,7 +43,6 @@ abstract class Item(
 }
 
 @Entity
-@DiscriminatorValue("A")
 class Album : Item() {
     lateinit var artist: String
     var etc: String? = null
@@ -56,7 +61,6 @@ class Album : Item() {
 }
 
 @Entity
-@DiscriminatorValue("M")
 class Movie : Item() {
     lateinit var director: String
     lateinit var actor: String
@@ -75,7 +79,6 @@ class Movie : Item() {
 }
 
 @Entity
-@DiscriminatorValue("B")
 class Book : Item() {
     lateinit var author: String
     lateinit var isbn: String

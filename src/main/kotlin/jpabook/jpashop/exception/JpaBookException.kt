@@ -13,4 +13,5 @@ enum class ErrorCode(
     ALREADY_EXISTS_MEMBER(101, "already.exists.member"),
 
     NOT_EXISTS_ITEM(200, "not.exists.item"),
+    OUT_OF_STOCK(201, "out.of.stock"),
 }

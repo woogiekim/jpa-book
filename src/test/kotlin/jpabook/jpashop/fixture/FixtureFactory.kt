@@ -5,6 +5,7 @@ import jpabook.jpashop.item.domain.*
 import jpabook.jpashop.jpa.Address
 import jpabook.jpashop.member.domain.Member
 import jpabook.jpashop.order.domain.Order
+import jpabook.jpashop.order.domain.OrderItem
 
 class FixtureFactory {
     companion object {
@@ -14,6 +15,10 @@ class FixtureFactory {
 
         fun createOrder(member: Member): Order {
             return Order(member).apply { id = 1 }
+        }
+
+        fun createOrderItem(item: Item, order: Order, count: Int): OrderItem {
+            return OrderItem(item, order, count).apply { id = 1 }
         }
 
         fun createDelivery(order: Order): Delivery {
