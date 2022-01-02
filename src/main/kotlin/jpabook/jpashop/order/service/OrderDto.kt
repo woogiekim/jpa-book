@@ -1,8 +1,11 @@
 package jpabook.jpashop.order.service
 
+import jpabook.jpashop.jpa.Address
+
 data class OrderItemRequest(
     val memberId: Long,
-    val items: List<ItemRequest>
+    val items: List<ItemRequest>,
+    val address: Address
 )
 
 data class ItemRequest(
